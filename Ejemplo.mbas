@@ -1,0 +1,81 @@
+program prueba
+
+
+' Conexiones del módulo LCD
+dim LCD_RS as sbit at RB4_bit
+    LCD_EN as sbit at RB5_bit
+    LCD_D4 as sbit at RB0_bit
+    LCD_D5 as sbit at RB1_bit
+    LCD_D6 as sbit at RB2_bit
+    LCD_D7 as sbit at RB3_bit
+
+' Dirección de los pines (TRIS)
+dim LCD_RS_Direction as sbit at TRISB4_bit
+    LCD_EN_Direction as sbit at TRISB5_bit
+    LCD_D4_Direction as sbit at TRISB0_bit
+    LCD_D5_Direction as sbit at TRISB1_bit
+    LCD_D6_Direction as sbit at TRISB2_bit
+    LCD_D7_Direction as sbit at TRISB3_bit
+ Dim t as word
+ Dim x as char
+main:
+'Declaracion de los puertos
+Trisb = 0
+Trise = 0
+Porte = 0
+t=2000
+x=5
+
+Lcd_Init()
+lcd_cmd(_lcd_clear)
+lcd_cmd(_lcd_cursor_off)
+Lcd_out(2,5,"Hola Banda")
+Lcd_out(3,5,"probando")
+vdelay_ms(t)
+inicio:
+Uart1_init(9600)
+delay_ms(1000)
+
+if (Uart1_Data_Ready()) then
+x=Uart1_Read()
+end if
+
+select case x
+    case 0
+         porte = 0
+         lcd_cmd(_lcd_clear)
+         Lcd_out(2,5,"APAGANDO TODO")
+         Lcd_out(3,5,"FELIZ NOCHE :)")
+    case 1
+        porte = 1
+        lcd_cmd(_lcd_clear)
+        Lcd_out(2,5,"ENCENDIENDO LUZ")
+        Lcd_out(3,5,"DE LA SALA")
+    case 2
+        porte = 2
+        lcd_cmd(_lcd_clear)
+        Lcd_out(2,5,"ENCENDIENDO")
+        Lcd_out(3,5,"VENTILADOR")
+    case 3
+         porte = 4
+         lcd_cmd(_lcd_clear)
+         Lcd_out(2,5,"ENCENDIENDO")
+         Lcd_out(3,5,"LUZ COMEDOR")
+    case 4
+         porte = 15
+         lcd_cmd(_lcd_clear)
+         Lcd_out(2,5,"ENCENDIENDO")
+         Lcd_out(3,5,"TODO")
+    Case 5
+         porte = 0
+         lcd_cmd(_lcd_clear)
+         Lcd_out(2,5,"ESPERANDO")
+         Lcd_out(3,5,"INSTRUCCIONES")
+    case else
+        lcd_cmd(_lcd_clear)
+        Lcd_out(2,5,"COMANDO U OPCCION")
+        Lcd_out(3,5,"NO IDENTIFICADA")
+end select
+
+goto inicio
+end.
